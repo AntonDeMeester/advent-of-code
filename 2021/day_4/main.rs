@@ -1,10 +1,17 @@
-use std::cmp::Ordering;
+use std::collections::HashSet;
+use std::convert::TryInto;
 use std::fs;
 
 #[derive(Debug, Copy, Clone)]
-struct BitCount {
-    zero: i32,
-    one: i32,
+struct BingoPattern {
+    numbers: [[i8; 5]; 5],
+    state: [[bool; 5]; 5],
+}
+
+#[derive(Debug)]
+struct BingoResult {
+    pattern: BingoPattern,
+    rounds: Vec<i8>,
 }
 
 fn read_file(path: &str) -> Vec<String> {
@@ -13,87 +20,141 @@ fn read_file(path: &str) -> Vec<String> {
     split_lines.map(|s| s.to_string()).collect()
 }
 
-fn count_bits(lines: &Vec<String>) -> Vec<BitCount> {
-    let mut result = vec![BitCount { zero: 0, one: 0 }; lines[0].len()];
-    for l in lines {
-        for (i, c) in l.chars().enumerate() {
-            match c {
-                '1' => result[i].one += 1,
-                '0' => result[i].zero += 1,
-                _ => panic!("Could not parse line {:?}", c),
+fn parse_lines(lines: &Vec<String>) -> (Vec<i8>, Vec<BingoPattern>) {
+    let numbers_lines: Vec<i8> = lines[0].split(",").map(|s| s.parse().unwrap()).collect();
+
+    let mut i = 2;
+    let mut patterns = Vec::<BingoPattern>::new();
+    while i < lines.len() {
+        let mut numbers: [[i8; 5]; 5] = [[0; 5]; 5];
+        for j in 0..5 {
+            let line: Vec<i8> = lines[i + j]
+                .split_ascii_whitespace()
+                .map(|s| s.parse().unwrap())
+                .collect();
+            numbers[j] = line.try_into().expect("Slice with incorrect length");
+        }
+        let state = [[false; 5]; 5];
+        patterns.push(BingoPattern {
+            numbers: numbers,
+            state: state,
+        });
+        i += 6;
+    }
+    return (numbers_lines, patterns);
+}
+
+fn resolve_bingo(numbers: &Vec<i8>, bingo: &BingoPattern) -> (bool, [[bool; 5]; 5]) {
+    let mut state = [[false; 5]; 5];
+    for i in 0..bingo.numbers.len() {
+        for j in 0..bingo.numbers[0].len() {
+            for value in numbers {
+                if bingo.numbers[i][j] == *value {
+                    state[i][j] = true;
+                    break;
+                }
             }
         }
     }
-    result
-}
 
-fn calculate_power(lines: &Vec<String>) -> (i32, i32) {
-    let parsed = count_bits(&lines);
-    let (mut gamma, mut epsilon) = (0, 0);
-    for b in parsed {
-        gamma *= 2;
-        epsilon *= 2;
-        match b.one > b.zero {
-            true => gamma += 1,
-            false => epsilon += 1,
+    for i in 0..bingo.numbers.len() {
+        for _ in 0..bingo.numbers[0].len() {
+            if state[i].iter().all(|x| *x == true) {
+                return (true, state);
+            }
+            let vert = [
+                state[0][i],
+                state[1][i],
+                state[2][i],
+                state[3][i],
+                state[4][i],
+            ];
+            if vert.iter().all(|x| *x == true) {
+                return (true, state);
+            }
         }
     }
-    (gamma, epsilon)
+    return (false, state);
 }
 
-fn calculate_life_metrics(lines: &Vec<String>, invert: bool) -> i32 {
-    let mut filtered_lines = lines.clone();
-    for i in 0..lines[0].len() {
-        if filtered_lines.len() <= 1 {
-            break;
+fn calculate_result(pattern: &BingoPattern, numbers: &Vec<i8>) -> i32 {
+    let mut left = 0i32;
+    for i in 0..pattern.numbers.len() {
+        for j in 0..pattern.numbers[0].len() {
+            if !pattern.state[i][j] {
+                left += i32::from(pattern.numbers[i][j]);
+            }
         }
-        let parsed = count_bits(&filtered_lines);
-        let bit = parsed[i];
-        let filter_char = match (bit.one.cmp(&bit.zero), invert) {
-            (Ordering::Greater, false) => '1',
-            (Ordering::Equal, false) => '1',
-            (Ordering::Less, false) => '0',
-            (Ordering::Greater, true) => '0',
-            (Ordering::Equal, true) => '0',
-            (Ordering::Less, true) => '1',
-        };
-        filtered_lines = filtered_lines
-            .into_iter()
-            .filter(|line| (line.as_bytes()[i] as char) == filter_char)
-            .collect();
     }
-    if filtered_lines.len() != 1 {
-        panic!("Filtered lines does not have size 1, {:?}", filtered_lines);
-    }
-    i32::from_str_radix(&filtered_lines[0].to_string(), 2).unwrap()
+    let right = i32::from(numbers[numbers.len() - 1]);
+
+    return left * right;
 }
 
-fn calculate_life_support(lines: &Vec<String>) -> (i32, i32) {
-    (
-        calculate_life_metrics(&lines, false),
-        calculate_life_metrics(&lines, true),
-    )
+fn play_normal_bingo(numbers: &Vec<i8>, patterns: &Vec<BingoPattern>) -> (BingoPattern, Vec<i8>) {
+    for i in 5..numbers.len() {
+        let number_slice = &numbers[0..i];
+        for p in patterns {
+            let (success, state) = resolve_bingo(&number_slice.to_vec(), p);
+            if success {
+                let result = BingoPattern {
+                    numbers: p.numbers,
+                    state: state,
+                };
+                return (result, number_slice.to_vec());
+            }
+        }
+    }
+    panic!("AAAAAH")
 }
 
-fn day_3() {
-    let filename = "2021/day_3/input.txt";
+fn lose_bingo<'a>(numbers: &Vec<i8>, patterns: &Vec<BingoPattern>) -> BingoResult {
+    let mut winner_index = HashSet::new();
+    let mut last_winner: Option<BingoResult> = None;
+    for i in 5..numbers.len() {
+        let number_slice = &numbers[0..i];
+        for (j, p) in patterns.iter().enumerate() {
+            if winner_index.contains(&j) {
+                continue;
+            }
+            let (success, state) = resolve_bingo(&number_slice.to_vec(), p);
+            if success {
+                last_winner = Some(BingoResult {
+                    pattern: BingoPattern {
+                        numbers: p.numbers,
+                        state: state,
+                    },
+                    rounds: number_slice.to_vec(),
+                });
+                winner_index.insert(j);
+            }
+        }
+    }
+    last_winner.expect("Could not find any winners")
+}
+
+fn day_4() {
+    let filename = "2021/day_4/input.txt";
     let lines = read_file(filename);
-    let (gamma, epsilon) = calculate_power(&lines); // Part 1
+    let (numbers, patterns) = parse_lines(&lines);
+
+    let (pattern, rounds) = play_normal_bingo(&numbers, &patterns);
+    let result = calculate_result(&pattern, &rounds);
     println!(
-        "Epsilon is {epsilon}, gamma is {gamma}. The total power consumptions is {total}",
-        epsilon = epsilon,
-        gamma = gamma,
-        total = gamma * epsilon
+        "Normal bingo was solved after {} rounds. The result is {}",
+        rounds.len(),
+        result
     );
-    let (oxygen, co2) = calculate_life_support(&lines); // Part 2
+
+    let last_result = lose_bingo(&numbers, &patterns);
+    let lost_result = calculate_result(&last_result.pattern, &last_result.rounds);
     println!(
-        "Oxygen is {oxygen}, CO2 is {co2}. The total life support is {total}",
-        oxygen = oxygen,
-        co2 = co2,
-        total = oxygen * co2
+        "Losing bingo was solved after {} rounds. The result is {}",
+        last_result.rounds.len(),
+        lost_result
     );
 }
 
 fn main() {
-    day_3();
+    day_4();
 }
