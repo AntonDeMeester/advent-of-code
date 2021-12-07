@@ -26,3 +26,13 @@ func MaxInt(n ...int) int {
 	}
 	return res
 }
+
+func MinInt(n ...int) int {
+	res := 0
+	for _, i := range n {
+		if res > i {
+			res = i
+		}
+	}
+	return res
+}
