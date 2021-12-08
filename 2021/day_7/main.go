@@ -58,7 +58,7 @@ func findMinFuelComplex(d []int) int {
 	return minFuel
 }
 
-func day_6() {
+func day_7() {
 	filename := "input.txt"
 	rawLines, err := adventUtils.ReadFileAdvent(filename, 7)
 	if err != nil {
@@ -78,5 +78,5 @@ func day_6() {
 }
 
 func main() {
-	adventUtils.Benchmark(day_6)
+	adventUtils.Benchmark(day_7)
 }
