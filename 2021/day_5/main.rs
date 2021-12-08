@@ -1,6 +1,7 @@
 use std::cmp::Ordering;
 use std::convert::TryInto;
 use std::fs;
+use std::time::Instant;
 
 #[derive(Debug, Copy, Clone)]
 struct Point {
@@ -139,5 +140,7 @@ fn day_5() {
 }
 
 fn main() {
+    let now = Instant::now();
     day_5();
+    println!("Rust took {} microseconds", now.elapsed().as_micros());
 }

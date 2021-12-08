@@ -1,5 +1,6 @@
 use std::cmp::Ordering;
 use std::fs;
+use std::time::Instant;
 
 #[derive(Debug, Copy, Clone)]
 struct BitCount {
@@ -95,5 +96,7 @@ fn day_3() {
 }
 
 fn main() {
+    let now = Instant::now();
     day_3();
+    println!("Rust took {} microseconds", now.elapsed().as_micros());
 }

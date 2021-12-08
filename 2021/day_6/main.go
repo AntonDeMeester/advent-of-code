@@ -82,7 +82,7 @@ func countFishAfterDays(fish []int, days int) int64 {
 }
 
 func day_6() {
-	filename := "input.txt"
+	filename := "input_easy.txt"
 	rawLines, err := adventUtils.ReadFileAdvent(filename, 6)
 	if err != nil {
 		fmt.Errorf("%+v\n", err)

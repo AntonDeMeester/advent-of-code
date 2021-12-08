@@ -1,6 +1,7 @@
 use std::collections::HashSet;
 use std::convert::TryInto;
 use std::fs;
+use std::time::Instant;
 
 #[derive(Debug, Copy, Clone)]
 struct BingoPattern {
@@ -156,5 +157,7 @@ fn day_4() {
 }
 
 fn main() {
+    let now = Instant::now();
     day_4();
+    println!("Rust took {} microseconds", now.elapsed().as_micros());
 }

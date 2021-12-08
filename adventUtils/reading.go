@@ -53,7 +53,7 @@ func ParseToInt(s []string) ([]int, []errorAt) {
 }
 
 func Benchmark(f func()) {
-	defer duration(track("total"))
+	defer duration(track("Go took"))
 	f()
 }
 
