@@ -135,8 +135,6 @@ func figureOutDigits(signals []string) map[string]int {
 			sols[5] = s
 		} else if i, j := getOverlap(s, sols[4]); i == 3 && j == 2 {
 			sols[2] = s
-		} else {
-			notFound = append(notFound, s)
 		}
 	}
 
