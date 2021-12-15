@@ -55,7 +55,7 @@ func findLowRiskRoute(c cave) int {
 
 	for k := range c {
 		score[k] = math.MaxInt32
-		guess[k] = math.MaxInt32
+		guess[k] = 0
 		if k[0] > maxX {
 			maxX = k[0]
 		}
