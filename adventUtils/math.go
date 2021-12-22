@@ -1,5 +1,7 @@
 package adventUtils
 
+import "math"
+
 func Sum(n []int) int {
 	r := 0
 	for _, c := range n {
@@ -18,7 +20,7 @@ func IsIn(i int, l []int) bool {
 }
 
 func MaxInt(n ...int) int {
-	res := 0
+	res := math.MinInt
 	for _, i := range n {
 		if res < i {
 			res = i
@@ -28,7 +30,7 @@ func MaxInt(n ...int) int {
 }
 
 func MinInt(n ...int) int {
-	res := 0
+	res := math.MaxInt
 	for _, i := range n {
 		if res > i {
 			res = i
