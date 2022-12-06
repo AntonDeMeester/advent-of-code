@@ -2,7 +2,7 @@ import time
 from typing import Callable
 
 
-def run_and_benchmark(solution: Callable[[], int]):
+def run_and_benchmark(solution: Callable[[], int | str]):
     start = time.time()
     result = solution()
     duration = time.time() - start
