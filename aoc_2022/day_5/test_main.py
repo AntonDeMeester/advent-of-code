@@ -1,9 +1,9 @@
 from .main import solve_part_1, solve_part_2
 
-sample_data = """    [D]    # noqa: W291
-[N] [C]    # noqa: W291
+sample_data = """    [D]    
+[N] [C]    
 [Z] [M] [P]
- 1   2   3 # noqa: W291
+ 1   2   3 
 
 move 1 from 2 to 1
 move 3 from 1 to 3
