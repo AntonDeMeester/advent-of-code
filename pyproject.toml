@@ -13,7 +13,7 @@ testpaths = [ "test" ]
 [tool.flake8]
 max-line-length = 128
 extend-ignore = [
-    "E203"
+    "E203", "W291"
 ]
 
 [tool.pytest]
