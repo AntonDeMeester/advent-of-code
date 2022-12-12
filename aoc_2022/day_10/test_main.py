@@ -176,11 +176,6 @@ def test_part_2_1():
     )
 
 
-def test_part_2_2():
-    result = solve_part_2(sample_data_2)
-    assert result == 36
-
-
 def test_part_2_with_real_data():
     result = load_and_solve_part_2()
     assert (
