@@ -1,3 +1,5 @@
+from typing import Iterable
+
 from aoc_2022.utils.parsing import load_file, split_by_newline
 from aoc_2022.utils.run import run_and_benchmark
 from aoc_2022.utils.space import Coordinate, Direction, move_from_coordinate
@@ -27,11 +29,11 @@ class History:
 
 
 class State(list[Coordinate]):
-    def __init__(self, *args: list[Coordinate] | Coordinate):
-        if isinstance(args[0], list) and len(args) == 1:
+    def __init__(self, *args: Iterable[Coordinate] | Coordinate):  # type: ignore
+        if isinstance(args[0], Iterable) and len(args) == 1:
             super().__init__(args[0])
         else:
-            super().__init__(args)
+            super().__init__(args)  # type: ignore
 
     @property
     def head(self):

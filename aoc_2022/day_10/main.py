@@ -1,6 +1,5 @@
 from aoc_2022.utils.parsing import load_file, split_by_newline
 from aoc_2022.utils.run import run_and_benchmark
-from enum import Enum
 
 
 def execute_command(command: str, current_value: int) -> list[int]:
@@ -37,7 +36,7 @@ def solve_part_1(input: str) -> int:
     return sum(data_during_cycle[i - 1] * i for i in range(20, len(data_during_cycle), 40))
 
 
-def load_and_solve_part_2() -> int:
+def load_and_solve_part_2() -> str:
     input = load_file(10)
     return solve_part_2(input)
 
@@ -57,7 +56,7 @@ def draw_image(data: list[int]) -> list[str]:
     return result
 
 
-def solve_part_2(input: str) -> int:
+def solve_part_2(input: str) -> str:
     commands = parse_input(input)
     data_during_cycle = calculate_data_during_cycles(commands)
     image = draw_image(data_during_cycle)
