@@ -1,5 +1,7 @@
 from typing import Generator, Generic, TypeVar
 
+from .space import Coordinate
+
 T = TypeVar("T")
 
 
@@ -13,6 +15,9 @@ class Matrix(Generic[T]):
 
     def get(self, x: int, y: int) -> T:
         return self.data[y][x]
+
+    def get_from_coordinate(self, coord: Coordinate) -> T:
+        return self.get(coord.x, coord.y)
 
     def horizontal_length(self) -> int:
         return len(self.data[0])
@@ -30,3 +35,20 @@ class Matrix(Generic[T]):
         for j, row in enumerate(self.data):
             for i, value in enumerate(row):
                 yield (i, j, value)
+
+
+class BoundedMatrix(Matrix[Generic[T]]):
+    def get(self, x: int, y: int) -> T | None:
+        if self.test_boundaries(x, y) is False:
+            return None
+        return self.data[y][x]
+
+    def get_from_coordinate(self, coord: Coordinate) -> T:
+        return self.get(coord.x, coord.y)
+
+    def test_boundaries(self, x: int, y: int) -> bool:
+        if x < 0 or x >= self.horizontal_length():
+            return False
+        if y < 0 or y >= self.vertical_length():
+            return False
+        return True
