@@ -37,13 +37,13 @@ class Matrix(Generic[T]):
                 yield (i, j, value)
 
 
-class BoundedMatrix(Matrix[Generic[T]]):
-    def get(self, x: int, y: int) -> T | None:
+class BoundedMatrix(Matrix[T]):
+    def get(self, x: int, y: int) -> T | None:  # type: ignore
         if self.test_boundaries(x, y) is False:
             return None
         return self.data[y][x]
 
-    def get_from_coordinate(self, coord: Coordinate) -> T:
+    def get_from_coordinate(self, coord: Coordinate) -> T | None:  # type: ignore
         return self.get(coord.x, coord.y)
 
     def test_boundaries(self, x: int, y: int) -> bool:

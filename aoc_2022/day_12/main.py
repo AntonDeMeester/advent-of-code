@@ -2,7 +2,7 @@ from collections import deque
 from dataclasses import dataclass
 
 from aoc_2022.utils.matrix import BoundedMatrix
-from aoc_2022.utils.parsing import load_file, split_by, split_by_double_newline, split_by_newline
+from aoc_2022.utils.parsing import load_file, split_by_newline
 from aoc_2022.utils.run import run_and_benchmark
 from aoc_2022.utils.space import Coordinate, Direction, move_from_coordinate
 
@@ -16,7 +16,6 @@ HIGHEST = "z"
 class Location:
     x: int
     y: int
-    height: str
     cost: int
 
     @property
@@ -57,7 +56,7 @@ def find_start(map: BoundedMatrix[str]) -> Coordinate:
 
 def initialse(map: BoundedMatrix[str]) -> Location:
     start = find_start(map)
-    return Location(start.x, start.y, map.get_from_coordinate(start), 0)
+    return Location(start.x, start.y, 0)
 
 
 def solve_puzzle_upwards(map: BoundedMatrix[str]) -> int:
@@ -65,12 +64,12 @@ def solve_puzzle_upwards(map: BoundedMatrix[str]) -> int:
 
     next_steps = deque([initialse(map)])
     visited: dict[Coordinate, Location] = {}
-    min_cost = float("inf")
+    min_cost = int(1e10)
 
     while next_steps:
         current = next_steps.popleft()
         for d in directions:
-            next_coord = move_from_coordinate(current, d)
+            next_coord = move_from_coordinate(current.coordinate, d)
             if not can_go_to(current.coordinate, next_coord, map):
                 continue
             new_cost = current.cost + 1
@@ -85,7 +84,6 @@ def solve_puzzle_upwards(map: BoundedMatrix[str]) -> int:
             new_loc = Location(
                 next_coord.x,
                 next_coord.y,
-                map.get_from_coordinate(next_coord),
                 new_cost,
             )
             visited[next_coord] = new_loc
@@ -113,7 +111,7 @@ def can_go_to_down(from_: Coordinate, to_: Coordinate, map: BoundedMatrix[str]) 
 
 def initialse_down(map: BoundedMatrix[str]) -> Location:
     end = find_goal(map)
-    return Location(end.x, end.y, map.get_from_coordinate(end), 0)
+    return Location(end.x, end.y, 0)
 
 
 def solve_puzzle_downwards(map: BoundedMatrix[str]) -> int:
@@ -121,12 +119,12 @@ def solve_puzzle_downwards(map: BoundedMatrix[str]) -> int:
 
     next_steps = deque([initialse_down(map)])
     visited: dict[Coordinate, Location] = {}
-    min_cost = float("inf")
+    min_cost = int(1e10)
 
     while next_steps:
         current = next_steps.popleft()
         for d in directions:
-            next_coord = move_from_coordinate(current, d)
+            next_coord = move_from_coordinate(current.coordinate, d)
             if not can_go_to_down(current.coordinate, next_coord, map):
                 continue
             new_cost = current.cost + 1
@@ -141,7 +139,6 @@ def solve_puzzle_downwards(map: BoundedMatrix[str]) -> int:
             new_loc = Location(
                 next_coord.x,
                 next_coord.y,
-                map.get_from_coordinate(next_coord),
                 new_cost,
             )
             visited[next_coord] = new_loc
