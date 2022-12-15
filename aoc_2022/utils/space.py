@@ -1,5 +1,6 @@
 from dataclasses import dataclass
 from enum import Enum
+from typing import NamedTuple
 
 
 class MultiValueEnm(Enum):
@@ -49,3 +50,40 @@ def move_from_coordinate(coordinate: Coordinate, direction: Direction, amount: i
         case Direction.LEFT:
             return Coordinate(coordinate.x - amount, coordinate.y)
     raise ValueError(f"Direction {direction} not implemented")
+
+
+def get_manhattan_distance(first: Coordinate, second: Coordinate) -> int:
+    return abs(first.x - second.x) + abs(first.y - second.y)
+
+
+class Range(NamedTuple):
+    start: int
+    end: int
+
+
+def merge_ranges(ranges: list[Range]) -> list[Range]:
+    """
+    Merges distinct ranges to a new distinct list of ranges
+    Ranges do not have any requirements (4, 2) is allowed, not necessarily sorted
+    """
+    # Makes sure start is always lower or equal to end
+    correct_sorted = [Range(x1, x2) if x1 < x2 else Range(x2, x1) for x1, x2 in ranges]
+    # Make sure the ranges are sorted on the start
+    sorted_ranges = sorted(correct_sorted, key=lambda x: x[0])
+
+    new_ranges: list[Range] = []
+    last = sorted_ranges[0]
+    for curr in sorted_ranges[1:]:
+        # We know last[0] <= curr[0]
+        if last.end < curr.start:
+            # Completely separate e.g. 0,2 and 3,4
+            new_ranges.append(last)
+            last = curr
+        elif last.end >= curr.end:
+            # Curr is envelopped in last e.g. 0,10 and 2,10
+            continue
+        elif last.end >= curr.start:
+            # Overlap on ends e.g. 0,2 and 1,4
+            last = Range(last.start, curr.end)
+    new_ranges.append(last)
+    return new_ranges
