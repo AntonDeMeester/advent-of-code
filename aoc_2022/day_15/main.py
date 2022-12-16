@@ -47,6 +47,10 @@ class Sensor:
     sensor: Coordinate
     closest_beacon: Coordinate
 
+    @property
+    def distance(self):
+        return get_manhattan_distance(self.sensor, self.closest_beacon)
+
     def __str__(self) -> str:
         first = f"Sensor at x={self.sensor.x}, y={self.sensor.y}:"
         second = f"closest beacon is at x={self.closest_beacon.x}, y={self.closest_beacon.y}"
@@ -102,13 +106,67 @@ def solve_part_1(input: str, row: int) -> int:
     return map.get_not_becaons_places_in_row(row)
 
 
+# Part 2
+
+
+def generate_edge_nodes(sensor: Sensor) -> set[Coordinate]:
+    edges: set[Coordinate] = set()
+    just_beyond_distance = sensor.distance + 1
+    for x in range(0, just_beyond_distance + 1):
+        y = just_beyond_distance - x
+
+        top = move_from_coordinate(sensor.sensor, Direction.UP, y)
+        edges.add(move_from_coordinate(top, Direction.LEFT, x))
+        edges.add(move_from_coordinate(top, Direction.RIGHT, x))
+
+        bottom = move_from_coordinate(sensor.sensor, Direction.DOWN, y)
+        edges.add(move_from_coordinate(bottom, Direction.LEFT, x))
+        edges.add(move_from_coordinate(bottom, Direction.RIGHT, x))
+
+    return edges
+
+
+def is_edge_node_taken(edge: Coordinate, sensor: Sensor) -> bool:
+    return get_manhattan_distance(edge, sensor.sensor) <= sensor.distance
+
+
+def is_edge_out_of_bounds(edge: Coordinate, middle: int) -> bool:
+    return edge.x < 0 or edge.y < 0 or edge.x > middle * 2 or edge.y > middle * 2
+
+
+def is_open_edge_node(edge: Coordinate, sensors: list[Sensor], search_index: int, middle: int) -> bool:
+    if is_edge_out_of_bounds(edge, middle):
+        return False
+    for i, sensor in enumerate(sensors):
+        if i == search_index:
+            continue
+        if is_edge_node_taken(edge, sensor):
+            return False
+    return True
+
+
+def find_broken_beacon(sensors: list[Sensor], middle: int) -> Coordinate:
+    for search_index, search_sensor in enumerate(sensors):
+        edge_nodes = generate_edge_nodes(search_sensor)
+        for edge in edge_nodes:
+            if is_open_edge_node(edge, sensors, search_index, middle):
+                return edge
+    raise ValueError("Couldn't find open spot")
+
+
 def load_and_solve_part_2() -> int:
     input = load_file(15)
-    return solve_part_2(input)
+    return solve_part_2(input, 2000000)
 
 
-def solve_part_2(input: str) -> int:
-    return 0
+def score_broken_beacon(coordinate: Coordinate) -> int:
+    return coordinate.x * 4000000 + coordinate.y
+
+
+def solve_part_2(input: str, middle: int) -> int:
+    sensors = parse_input(input)
+    broken_beacon = find_broken_beacon(sensors, middle)
+    return score_broken_beacon(broken_beacon)
 
 
 if __name__ == "__main__":

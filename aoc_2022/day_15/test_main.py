@@ -27,10 +27,10 @@ def test_part_1_with_real_data():
 
 
 def test_part_2_1():
-    result = solve_part_2(sample_data)
-    assert result == 93
+    result = solve_part_2(sample_data, 10)
+    assert result == 56000011
 
 
 def test_part_2_with_real_data():
     result = load_and_solve_part_2()
-    assert result == 27625
+    assert result == 13784551204480

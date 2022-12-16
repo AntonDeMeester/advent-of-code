@@ -52,6 +52,12 @@ def move_from_coordinate(coordinate: Coordinate, direction: Direction, amount: i
     raise ValueError(f"Direction {direction} not implemented")
 
 
+def move_multiple_from_coordinate(coordinate: Coordinate, moves: list[tuple[Direction, int]]) -> Coordinate:
+    for direction, amount in moves:
+        coordinate = move_from_coordinate(coordinate, direction, amount)
+    return coordinate
+
+
 def get_manhattan_distance(first: Coordinate, second: Coordinate) -> int:
     return abs(first.x - second.x) + abs(first.y - second.y)
 
