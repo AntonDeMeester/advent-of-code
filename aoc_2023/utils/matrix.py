@@ -36,6 +36,17 @@ class Matrix(Generic[T]):
             for i, value in enumerate(row):
                 yield (i, j, value)
 
+    def get_adjecent_values(self, coord: Coordinate) -> list[T]:
+        results: list[T] = []
+        for j in range(-1, 2):
+            for i in range(-1, 2):
+                if i == 0 and j == 0:
+                    continue
+                results.append(self.get(coord.x + i, coord.y + j))
+        return results
+
+
+
 
 class BoundedMatrix(Matrix[T]):
     def get(self, x: int, y: int) -> T | None:  # type: ignore
