@@ -1,6 +1,6 @@
 def load_file(day: int, part: int | None = None) -> str:
     part_file = f"input_{part}" if part is not None else "input"
-    with open(f"aoc_2022/day_{day:02d}/{part_file}.txt", "r") as f:
+    with open(f"aoc_2023/day_{day:02d}/{part_file}.txt", "r") as f:
         return f.read()
 
 
