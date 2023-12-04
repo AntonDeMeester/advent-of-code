@@ -32,6 +32,7 @@ def find_last_number(line: str) -> int:
             return int(char)
     raise ValueError(f"Cannot find number in line. {line}")
 
+
 def load_and_solve_part_2() -> int:
     input = load_file(1)
     return solve_part_2(input)
@@ -47,6 +48,7 @@ def combine_complex_number(line: str) -> int:
     first = find_first_complex_number(line)
     last = find_last_complex_number(line)
     return first * 10 + last
+
 
 NUMBER_MAP = {"one": 1, "two": 2, "three": 3, "four": 4, "five": 5, "six": 6, "seven": 7, "eight": 8, "nine": 9}
 
@@ -73,6 +75,7 @@ def find_last_complex_number(line: str) -> int:
             if substring.startswith(word):
                 return NUMBER_MAP[word]
     raise ValueError(f"Cannot find number in line. {line}")
+
 
 if __name__ == "__main__":
     run_and_benchmark(load_and_solve_part_1)
