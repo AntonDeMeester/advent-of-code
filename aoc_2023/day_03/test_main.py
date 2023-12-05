@@ -16,6 +16,7 @@ def test_example_one():
     result = solve_part_1(schematic)
     assert result == 4361
 
+
 def test_example_two():
     result = solve_part_2(schematic)
     assert result == 467835

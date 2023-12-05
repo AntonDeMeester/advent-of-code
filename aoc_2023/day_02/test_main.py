@@ -12,6 +12,7 @@ def test_example_one():
     result = solve_part_1(example_games, example_suggestion)
     assert result == 8
 
+
 def test_example_two():
     result = solve_part_2(example_games)
     assert result == 2286

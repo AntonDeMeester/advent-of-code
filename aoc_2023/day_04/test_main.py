@@ -12,6 +12,7 @@ def test_example_one():
     result = solve_part_1(lottery)
     assert result == 13
 
+
 def test_example_two():
     result = solve_part_2(lottery)
     assert result == 30

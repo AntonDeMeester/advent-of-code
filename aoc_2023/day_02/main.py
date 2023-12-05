@@ -65,6 +65,7 @@ def solve_part_2(input: list[str]) -> int:
 def calculate_all_game_power(game_dict: dict[int, list[GameState]]) -> list[int]:
     return [calculate_game_power(game_list) for game_list in game_dict.values()]
 
+
 def calculate_game_power(game_list: list[GameState]) -> int:
     min_state = GameState(0, 0, 0)
     for game in game_list:
@@ -75,6 +76,7 @@ def calculate_game_power(game_list: list[GameState]) -> int:
         if game.blue > min_state.blue:
             min_state.blue = game.blue
     return min_state.red * min_state.green * min_state.blue
+
 
 if __name__ == "__main__":
     run_and_benchmark(load_and_solve_part_1)

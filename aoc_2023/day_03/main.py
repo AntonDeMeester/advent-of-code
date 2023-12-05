@@ -6,14 +6,17 @@ from aoc_2023.utils.space import Coordinate
 Schematic = BoundedMatrix[str | int | None]
 GEAR_SYMBOL = "*"
 
+
 def load_and_solve_part_1() -> int:
     input = load_file(3)
     return solve_part_1(input)
+
 
 def solve_part_1(input: str):
     parsed_schematic = parse_input(input)
     numbers_with_symbols = find_numbers_with_symbols(parsed_schematic)
     return sum(numbers_with_symbols)
+
 
 def parse_input(input: str) -> Schematic:
     """
@@ -45,10 +48,11 @@ def parse_input(input: str) -> Schematic:
                     value = value * 10 + int(char)
                     index += 1
                     count += 1
-                for _ in range (count):
+                for _ in range(count):
                     parsed_line.append(value)
         parsed_lines.append(parsed_line)
     return BoundedMatrix(parsed_lines)
+
 
 def find_numbers_with_symbols(schematic: Schematic) -> list[int]:
     result: list[int] = []
@@ -69,6 +73,7 @@ def find_numbers_with_symbols(schematic: Schematic) -> list[int]:
             result.append(value)
     return result
 
+
 def load_and_solve_part_2() -> int:
     input = load_file(3)
     return solve_part_2(input)
@@ -79,25 +84,27 @@ def solve_part_2(input: list[str]) -> int:
     gear_ratios = find_gear_ratios(parsed_schematic)
     return sum(gear_ratios)
 
+
 def find_gear_ratios(schematic: Schematic) -> list[int]:
     result: list[int] = []
     for x, y, value in schematic:
         if value != GEAR_SYMBOL:
             continue
-        surroundings = schematic.get_adjecent_values(Coordinate(x,y))
-        numbers: list[int]= []
+        surroundings = schematic.get_adjecent_values(Coordinate(x, y))
+        numbers: list[int] = []
         numbers.extend(get_different_numbers(surroundings[:3]))
         numbers.extend(get_different_numbers([surroundings[3], None, surroundings[4]]))
         numbers.extend(get_different_numbers(surroundings[5:]))
-        
+
         if len(numbers) == 2:
             result.append(numbers[0] * numbers[1])
     return result
 
+
 def get_different_numbers(values: list[int]) -> list[int]:
     """
     Get the different values from a horizontal line
-    For example: 
+    For example:
     [1, None, 2] gives [1, 2]
     [111, 111, 111] gives [111]
     """
@@ -113,8 +120,10 @@ def get_different_numbers(values: list[int]) -> list[int]:
         return [values[2]]
     return []
 
+
 def is_value(value) -> bool:
     return isinstance(value, int)
+
 
 if __name__ == "__main__":
     run_and_benchmark(load_and_solve_part_1)

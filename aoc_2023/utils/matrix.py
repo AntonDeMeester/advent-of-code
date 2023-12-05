@@ -46,8 +46,6 @@ class Matrix(Generic[T]):
         return results
 
 
-
-
 class BoundedMatrix(Matrix[T]):
     def get(self, x: int, y: int) -> T | None:  # type: ignore
         if self.test_boundaries(x, y) is False:
