@@ -45,7 +45,6 @@ def test_example_two():
     assert result == 46
 
 
-
 """
 EXAMPLE 
 

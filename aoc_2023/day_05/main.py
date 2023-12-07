@@ -29,6 +29,7 @@ class Almanac:
     temperature_to_humidity: list[AlmanacMapItem]
     humidity_to_location: list[AlmanacMapItem]
 
+
 def load_and_solve_part_1() -> int:
     input = load_file(5)
     return solve_part_1(input)
@@ -93,15 +94,18 @@ def solve_part_2(input: str) -> int:
     almanac = parse_input(input)
 
     with Pool(10) as p:
-        results = p.starmap(solve_part_2_seed, [(almanac.seeds[i], almanac.seeds[i+1], almanac)for i in range(0, len(almanac.seeds), 2)])
+        results = p.starmap(
+            solve_part_2_seed, [(almanac.seeds[i], almanac.seeds[i + 1], almanac) for i in range(0, len(almanac.seeds), 2)]
+        )
     return min(results)
+
 
 def solve_part_2_seed(start: int, length: int, almanac: Almanac) -> int:
     minimum_location = sys.maxsize
     for j in range(start, start + length):
         location = find_location(almanac, j)
         minimum_location = min(location, minimum_location)
-    
+
     return minimum_location
 
 
