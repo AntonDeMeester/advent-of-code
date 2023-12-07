@@ -1,7 +1,9 @@
-from aoc_2023.utils.parsing import load_file, split_by_newline, split_by_double_newline
-from aoc_2023.utils.run import run_and_benchmark
+import sys
 from dataclasses import dataclass
-import math
+from multiprocessing import Pool
+
+from aoc_2023.utils.parsing import load_file, split_by_double_newline, split_by_newline
+from aoc_2023.utils.run import run_and_benchmark
 
 
 @dataclass
@@ -87,11 +89,20 @@ def load_and_solve_part_2() -> int:
     return solve_part_2(input)
 
 
-def solve_part_2(input: list[str]) -> int:
+def solve_part_2(input: str) -> int:
     almanac = parse_input(input)
-    almanac.seeds = update_to_seed_range(almanac.seeds)
-    locations = [find_location(almanac, seed) for seed in almanac.seeds]
-    return min(locations)
+
+    with Pool(10) as p:
+        results = p.starmap(solve_part_2_seed, [(almanac.seeds[i], almanac.seeds[i+1], almanac)for i in range(0, len(almanac.seeds), 2)])
+    return min(results)
+
+def solve_part_2_seed(start: int, length: int, almanac: Almanac) -> int:
+    minimum_location = sys.maxsize
+    for j in range(start, start + length):
+        location = find_location(almanac, j)
+        minimum_location = min(location, minimum_location)
+    
+    return minimum_location
 
 
 def update_to_seed_range(seeds: list[int]) -> list[int]:
