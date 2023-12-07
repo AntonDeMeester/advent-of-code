@@ -102,9 +102,7 @@ FourDimSpace = Dict[int, Dict[int, Dict[int, Dict[int, str]]]]
 
 def get_initial_space(initial_plane: str) -> FourDimSpace:
     # Z plane has y planes. Y planes has X planes. X plan defaults to "."
-    hyper_space: FourDimSpace = defaultdict(
-        lambda: defaultdict(lambda: defaultdict(lambda: defaultdict(lambda: ".")))
-    )
+    hyper_space: FourDimSpace = defaultdict(lambda: defaultdict(lambda: defaultdict(lambda: defaultdict(lambda: "."))))
     plane_0 = initial_plane.split("\n")
 
     for i, y in enumerate(plane_0):
@@ -132,9 +130,7 @@ def static_space(default_space: FourDimSpace) -> FourDimSpace:
     return static_space
 
 
-def get_surroundings(
-    hyper_space: FourDimSpace, x: int, y: int, z: int, w: int
-) -> List[str]:
+def get_surroundings(hyper_space: FourDimSpace, x: int, y: int, z: int, w: int) -> List[str]:
     all_points: List[str] = []
     # Hyper spaced
     for w_value in (w - 1, w + 1):
@@ -177,9 +173,7 @@ def part_two():
     for _ in range(6):
         print(get_active_nodes(hyper_space))
         iterator_space = static_space(hyper_space)
-        new_hyper_space: FourDimSpace = defaultdict(
-            lambda: defaultdict(lambda: defaultdict(lambda: defaultdict(lambda: ".")))
-        )
+        new_hyper_space: FourDimSpace = defaultdict(lambda: defaultdict(lambda: defaultdict(lambda: defaultdict(lambda: "."))))
         for w, space in iterator_space.items():
             for z, plane in space.items():
                 for y, line in plane.items():

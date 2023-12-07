@@ -41,9 +41,7 @@ def part_one():
     print(location)
 
 
-def move_waypoint(
-    instruction: str, waypoint: Tuple[float, float]
-) -> Tuple[float, float]:
+def move_waypoint(instruction: str, waypoint: Tuple[float, float]) -> Tuple[float, float]:
     direction = instruction[0]
     amount = int(instruction[1:])
     if direction == "N":

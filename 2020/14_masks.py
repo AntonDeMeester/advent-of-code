@@ -13,10 +13,7 @@ def apply_mask(mask: str, value: int) -> int:
     bin_value = str(bin(value))[2:]
     if len(bin_value) < len(mask):
         bin_value = ("0" * (len(mask) - len(bin_value))) + bin_value
-    masked_value = "".join(
-        value_i if masked_i == "X" else masked_i
-        for masked_i, value_i in zip(mask, bin_value)
-    )
+    masked_value = "".join(value_i if masked_i == "X" else masked_i for masked_i, value_i in zip(mask, bin_value))
 
     return int(masked_value, 2)
 
@@ -54,9 +51,7 @@ def apply_mem_mask(mask: str, memory: int) -> List[str]:
             floating_values = add_string_to_list(mask[i], floating_values)
             continue
         if mask[i] == "X":
-            floating_values = add_string_to_list(
-                "1", floating_values
-            ) + add_string_to_list("0", floating_values)
+            floating_values = add_string_to_list("1", floating_values) + add_string_to_list("0", floating_values)
 
     return floating_values
 

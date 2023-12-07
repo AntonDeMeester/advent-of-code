@@ -24,9 +24,7 @@ def part_one():
         if bus_time < first_bus_time:
             first_bus_time = bus_time
             first_bus = period
-    print(
-        f"Bus {first_bus} arrived at {first_bus_time}, {first_bus_time - time} after you arrive at {time}"
-    )
+    print(f"Bus {first_bus} arrived at {first_bus_time}, {first_bus_time - time} after you arrive at {time}")
     print(f"Solution = {(first_bus_time - time) * first_bus}")
 
 
@@ -46,11 +44,7 @@ def check_solution(time_stamp: int, bus_list: List[Optional[int]]) -> bool:
 def part_two():
     lines = input.split("\n")
     # buses = [int(bus) if bus.strip() != "x" else None for bus in lines[1].split(",")]
-    buses = {
-        i: int(value)
-        for i, value in enumerate(lines[1].split(","))
-        if value.strip() != "x"
-    }
+    buses = {i: int(value) for i, value in enumerate(lines[1].split(",")) if value.strip() != "x"}
     solved = False
     # max_time = max(int(bus) for bus in buses if bus is not None)
     # max_time = max(buses.values())

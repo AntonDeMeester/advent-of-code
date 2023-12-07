@@ -113,9 +113,7 @@ def part_two():
             current_instruction = switcharoo(current_instruction)
 
         line_history.add(line_number)
-        line_number, current_instruction, increase = get_next(
-            line_number, current_instruction, instructions
-        )
+        line_number, current_instruction, increase = get_next(line_number, current_instruction, instructions)
         acc += increase
         if current_instruction is None:
             break

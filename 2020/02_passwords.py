@@ -1011,11 +1011,7 @@ def part_one():
     for item in password:
         p = re.compile(regex_string)
         checked = p.search(item).groupdict()
-        if (
-            int(checked["min"])
-            <= checked["pass"].count(checked["letter"])
-            <= int(checked["max"])
-        ):
+        if int(checked["min"]) <= checked["pass"].count(checked["letter"]) <= int(checked["max"]):
             right += 1
 
     print(right)

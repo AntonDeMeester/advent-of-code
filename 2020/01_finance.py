@@ -207,9 +207,7 @@ def find_2020():
         for j, second in enumerate(numbers[i + 1 :]):
             for k, third in enumerate(numbers[i + j + 1 :]):
                 if first + second + third == 2020:
-                    print(
-                        f"Done: numbers are {first} {second} {third}. Product is {first*second*third}"
-                    )
+                    print(f"Done: numbers are {first} {second} {third}. Product is {first*second*third}")
                     return
 
 

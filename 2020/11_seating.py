@@ -24,9 +24,7 @@ def get_surrounding_seats(all_seats: List[List[str]], i: int, j: int) -> List[st
     return result
 
 
-def get_visible_seat(
-    all_seats: List[List[str]], location: Tuple[int, int], direction: Tuple[int, int]
-) -> str:
+def get_visible_seat(all_seats: List[List[str]], location: Tuple[int, int], direction: Tuple[int, int]) -> str:
     seat = "."
     position = location
     while seat == ".":

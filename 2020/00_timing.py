@@ -5,11 +5,7 @@ from time import time
 
 
 def exec():
-    onlyfiles = sorted(
-        f
-        for f in listdir(".")
-        if isfile(f) and f.endswith(".py") and not f.startswith("00")
-    )
+    onlyfiles = sorted(f for f in listdir(".") if isfile(f) and f.endswith(".py") and not f.startswith("00"))
     total = []
     for f in onlyfiles:
         start = time()
