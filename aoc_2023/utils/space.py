@@ -28,8 +28,8 @@ class MultiValueEnm(Enum):
 
 class Direction(MultiValueEnm):
     UP = "UP", "U", "NORTH", "N"
-    DOWN = "DOWN", "D", "EAST", "E"
-    RIGHT = "RIGHT", "R", "SOUTH", "S"
+    DOWN = "DOWN", "D", "SOUTH", "E"
+    RIGHT = "RIGHT", "R", "EAST", "S"
     LEFT = "LEFT", "L", "WEST", "W"
 
 

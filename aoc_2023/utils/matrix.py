@@ -45,6 +45,15 @@ class Matrix(Generic[T]):
                 results.append(self.get(coord.x + i, coord.y + j))
         return results
 
+    def get_adjecent_cardinal_values(self, coord: Coordinate) -> list[T]:
+        results = [
+            self.get(coord.x + 1, coord.y + 0),
+            self.get(coord.x + 0, coord.y + 1),
+            self.get(coord.x - 1, coord.y + 0),
+            self.get(coord.x + 0, coord.y - 1),
+        ]
+        return results
+
 
 class BoundedMatrix(Matrix[T]):
     def get(self, x: int, y: int) -> T | None:  # type: ignore
