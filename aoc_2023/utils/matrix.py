@@ -1,4 +1,5 @@
 from typing import Generator, Generic, TypeVar
+from copy import deepcopy
 
 from .space import Coordinate
 
@@ -53,6 +54,9 @@ class Matrix(Generic[T]):
             self.get(coord.x + 0, coord.y - 1),
         ]
         return results
+
+    def copy(self) -> "Matrix[T]":
+        return self.__class__(deepcopy(self.data))
 
 
 class BoundedMatrix(Matrix[T]):
