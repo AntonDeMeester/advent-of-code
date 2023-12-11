@@ -1,8 +1,5 @@
-import sys
-from dataclasses import dataclass
-from multiprocessing import Pool
 
-from aoc_2023.utils.parsing import load_file, split_by_double_newline, split_by_newline
+from aoc_2023.utils.parsing import load_file, split_by_newline
 from aoc_2023.utils.run import run_and_benchmark
 
 

@@ -1,5 +1,5 @@
 from copy import deepcopy
-from typing import Counter, List, Optional, Tuple
+from typing import Counter, List, Tuple
 
 try:
     with open("advent_of_code/11_seating_input.txt", "r") as input_file:
