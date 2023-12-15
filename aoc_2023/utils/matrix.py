@@ -1,4 +1,4 @@
-from typing import Generator, Generic, TypeVar
+from typing import Generator, Generic, TypeVar, Sequence
 from copy import deepcopy
 
 from .space import Coordinate
@@ -9,7 +9,7 @@ T = TypeVar("T")
 class Matrix(Generic[T]):
     """Matrix with horizontal x (left to right) and vertical y (top to bottom)"""
 
-    def __init__(self, data: list[list[T]]):
+    def __init__(self, data: Sequence[Sequence[T]]):
         self.data = data
         self._i = 0
         self._j = 0
@@ -57,6 +57,15 @@ class Matrix(Generic[T]):
 
     def copy(self) -> "Matrix[T]":
         return self.__class__(deepcopy(self.data))
+
+    def transpose(self) -> "Matrix[T]":
+        return self.__class__(self.get_columns())
+
+    def get_rows(self) -> Sequence[Sequence[T]]:
+        return self.data
+
+    def get_columns(self) -> list[list[T]]:
+        return [self.get_column(i) for i in range(self.horizontal_length())]
 
 
 class BoundedMatrix(Matrix[T]):
