@@ -4,7 +4,6 @@ from dataclasses import dataclass
 from aoc_2023.utils.parsing import load_file, split_by_double_newline, split_by_newline
 from aoc_2023.utils.run import run_and_benchmark
 from aoc_2023.utils.matrix import BoundedMatrix
-import math
 
 Value = Literal[".", "#"]
 Area = BoundedMatrix[Value]
