@@ -83,3 +83,43 @@ class BoundedMatrix(Matrix[T]):
         if y < 0 or y >= self.vertical_length():
             return False
         return True
+
+
+def rotate_clockwise(matrix: Matrix[T]) -> Matrix[T]:
+    """
+    Rotates a matrix clockwise
+
+    Input
+    1 2 3
+    4 5 6
+    7 8 9
+
+    Output
+    7 4 1
+    8 5 2
+    9 6 3
+    """
+    new_matrix: list[list[T]] = []
+    for col in matrix.get_columns():
+        new_matrix.append(list(reversed(col)))
+    return matrix.__class__(new_matrix)
+
+
+def rotate_anticlockwise(matrix: Matrix[T]) -> Matrix[T]:
+    """
+    Rotates a matrix clockwise
+
+    Input
+    1 2 3
+    4 5 6
+    7 8 9
+
+    Output
+    3 6 9
+    8 5 2
+    7 4 1
+    """
+    new_matrix: list[list[T]] = []
+    for col in reversed(matrix.get_columns()):
+        new_matrix.append(list(col))
+    return matrix.__class__(new_matrix)
