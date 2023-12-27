@@ -93,3 +93,76 @@ def merge_ranges(ranges: list[Range]) -> list[Range]:
             last = Range(last.start, curr.end)
     new_ranges.append(last)
     return new_ranges
+
+
+def intersect_ranges(original_ranges: list[Range]) -> Range | None:
+    """
+    Intersects distinct ranges to a new range
+    Start needs to be smaller then end
+    """
+    if len(original_ranges) == 0:
+        return None
+
+    ranges = original_ranges.copy()
+    current = original_ranges.pop()
+    while ranges:
+        next_ = ranges.pop()
+        current = intersect_two_ranges(current, next_)
+    return current
+
+
+def intersect_two_ranges(first: Range, second: Range) -> Range | None:
+    if first.end < second.start:
+        """
+        First is completely before
+        first  -####------
+        second ------####-
+        """
+        return None
+    elif first.end < second.start:
+        """
+        First is completly after
+        first  -----#####-
+        second -###-------
+        """
+        return None
+    elif first.start <= second.start:
+        """
+        First starts before second starts
+        first  -####???
+        second ----#???
+        """
+        if first.end < second.end:
+            """
+            First starts before second starts and ends before second ends
+            first  -#####-----
+            second ----####---
+            """
+            return Range(second.start, first.end)
+        else:
+            """
+            First starts before second starts and goes beyond second end
+            first  -#########-
+            second ----####---
+            """
+            return Range(second.start, second.end)
+    else:
+        """
+        First starts after second starts
+        first  ---#???
+        second -###??
+        """
+        if first.end < second.end:
+            """
+            First starts after second starts and ends before second ends
+            first  ---###--
+            second -######-
+            """
+            return Range(first.start, first.end)
+        else:
+            """
+            First starts after second starts and ends after second ends
+            first  ---####-
+            second -####---
+            """
+            return Range(first.start, second.end)
